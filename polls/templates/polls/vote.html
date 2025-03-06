@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body%}
+<body>
+    <div class= "container">
+        <h1>Vote on Poll</h1>
+        <form method="post">
+            {% csrf_token %}
+            <h2>{{ poll.question }}</h2>
+                    <h3>Total Votes: {{ poll.total_votes }}</h3>
+                    <p>Choices: </p>
+                    <ul>
+                        {% for choice in poll.choice_set.all %}
+                            <li>{{ choice.choice_text }} - {{ choice.votes }} votes</li>
+                        {% endfor %}
+                    </ul>
+            <label for="choice">Choose an option:</label>
+            <select name="choice" id="choice">
+                {% for choice in poll.choice_set.all %}
+                    <option value="{{ choice.id }}">{{ choice.choice_text }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Vote</button>
+        </form>
+        <A class="btn btn-danger btn-xs" HREF="{% url 'polls:delete_poll' poll.pk %}">Delete</A>
+        <p></p>
+        <a href="{% url 'polls:index' %}">Back</a>
+    </div>
+</body>
+{% endblock %}
+</html>

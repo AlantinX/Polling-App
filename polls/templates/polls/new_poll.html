@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+<script>
+    function addChoiceField() {
+        console.log("Button clicked");
+        let formIdx = document.getElementById("id_choice_set-TOTAL_FORMS").value;
+        let newField = document.getElementById("empty-form").innerHTML.replace(/__prefix__/g, formIdx);
+        document.getElementById("choices-container").insertAdjacentHTML("beforeend", newField);
+        document.getElementById("id_choice_set-TOTAL_FORMS").value = parseInt(formIdx) + 1;
+    }
+</script>
+{% endblock %}
+{% block body%}
+<body>
+    <div class="container">
+        <h1>New Poll</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <h3>Ask a question</h3>
+                {{ form.as_p }}
+            </div>
+            
+            <h3>What are the answers you want people to choose between?</h3>
+            <button type="button" class="btn btn-success btn-xs" onclick="addChoiceField()">+</button>
+            <div id="choices-container">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="choice-form">{{ form.as_p }}</div>
+                {% endfor %}
+            </div>
+            <br></br>
+            <button type="submit" class="btn btn-primary">Create Poll</button>
+
+            <!-- Empty form template for cloning -->
+            <div id="empty-form" style="display: none;">
+                {{ formset.empty_form.as_p }}
+            </div>
+        </form>
+    </div>
+</body>
+{% endblock %}
+</html>
