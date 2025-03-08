@@ -54,36 +54,3 @@ class DeletePoll(DeleteView):
 
     def get_success_url(self):
         return reverse('polls:index')
-    
-  
-# <--- Pages as functions in case I need them --->    
-# 
-# def index(request):
-#     polls = Poll.objects.all()
-#     return render(request, 'polls/index.html', {'polls': polls})
-
-# def vote(request, poll_id):
-#     poll = get_object_or_404(Poll, pk=poll_id)
-#     if request.method == 'POST':
-#         choice_id = request.POST.get('choice')
-#         choice = get_object_or_404(Choice, pk=choice_id)
-#         choice.votes += 1
-#         choice.save()
-#         return redirect('polls:index')
-#     return render(request, 'polls/vote.html', {'poll': poll})
-
-# def new_poll(request):
-#     if request.method == 'POST':
-#         form = PollForm(request.POST)
-#         formset = ChoiceFormSet(request.POST)
-#         if form.is_valid() and formset.is_valid():
-#             poll = form.save()
-#             choices = formset.save(commit=False)
-#             for choice in choices:
-#                 choice.poll = poll
-#                 choice.save()
-#             return redirect('polls:index')
-#     else:
-#         form = PollForm()
-#         formset = ChoiceFormSet()
-#     return render(request, 'polls/new_poll.html', {'form': form, 'formset': formset})
