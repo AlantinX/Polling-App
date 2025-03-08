@@ -11,8 +11,6 @@
                         <div class="card mb-4 poll-card">
                             <h3 class="card-header">{{ poll.question }}</h3>
                             <div class="card-body">
-                                <!-- <p class="card-text">Total Votes: {{ poll.total_votes }}</p>
-                                <p class="card-text">Choices:</p> -->
                                 <ul class="list-group list-group-flush">
                                     {% for choice in poll.choice_set.all %}
                                         <li class="list-group-item">{{ choice.choice_text }} - {{ choice.votes }} votes</li>
