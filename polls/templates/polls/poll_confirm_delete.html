@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load bootstrap3 %}
-<head>
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet"/>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <div class="alert alert-danger" role="alert">Are you sure you wish to delete this poll?</div>
-</head>
+{% extends "base.html" %}
+{% block body %}
+<div class= "container alert-danger">
+    <h1>Confirmation</h1>
+<div class="alert alert-danger" role="alert">Are you sure you wish to delete this poll?</div>
 <form action="." method="POST">
     {% csrf_token %}
-        <button type="submit" class="btn btn-danger">
-            {% bootstrap_icon "remove" %} Yes
-        </button>
+        <button type="submit" class="btn btn-danger">Yes</button>
 </form>
+{% endblock %}
 </html>

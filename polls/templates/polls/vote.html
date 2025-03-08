@@ -5,25 +5,27 @@
         <h1>Vote on Poll</h1>
         <form method="post">
             {% csrf_token %}
-            <h2>{{ poll.question }}</h2>
-                    <h3>Total Votes: {{ poll.total_votes }}</h3>
-                    <p>Choices: </p>
+            <div class="card mb-4 poll-card">
+            <h3 class="card-header"><button class="btn btn-primary btn-custom btn-space"><i class="fa-solid fa-less-than"></i></button></i>{{ poll.question }}</h3>
+                <div class="card-body">
                     <ul>
                         {% for choice in poll.choice_set.all %}
                             <li>{{ choice.choice_text }} - {{ choice.votes }} votes</li>
                         {% endfor %}
                     </ul>
-            <label for="choice">Choose an option:</label>
-            <select name="choice" id="choice">
-                {% for choice in poll.choice_set.all %}
-                    <option value="{{ choice.id }}">{{ choice.choice_text }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit">Vote</button>
+                    <label for="choice">Choose an option:</label>
+                    <select name="choice" id="choice">
+                        {% for choice in poll.choice_set.all %}
+                            <option value="{{ choice.id }}">{{ choice.choice_text }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Vote</button>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <A class="btn btn-danger btn-xs" HREF="{% url 'polls:delete_poll' poll.pk %}">Delete</A>
+                    </div>
+                </div>
+            </div>
         </form>
-        <A class="btn btn-danger btn-xs" HREF="{% url 'polls:delete_poll' poll.pk %}">Delete</A>
-        <p></p>
-        <a href="{% url 'polls:index' %}">Back</a>
     </div>
 </body>
 {% endblock %}
