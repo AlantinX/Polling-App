@@ -2,7 +2,7 @@
 {% block body%}
 <body>
     <div class= "container">
-        <h1>Polls</h1>
+        <h1>Polls <a href="{% url 'polls:login' %}" button class="btn btn-primary"><i class="fa-solid fa-user"></i>Sign In</button></a></h1>
         <div class="row row-cols-1">
             {% if polls %}
                 {% for poll in polls %}
