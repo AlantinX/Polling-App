@@ -1,3 +1,6 @@
 /.venv
 /.vscode
 /db.sqlite3
+polls/__pycache__
+polls/migrations
+portal/__pycache__
