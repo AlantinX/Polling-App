@@ -4,7 +4,16 @@
         <h1>Create a User Account</h1>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            <h5>{{form.username.label}}</h5>
+            {{form.username}}
+            <h5>{{form.password1.label}}</h5>
+            {{form.password1}}
+            <h5>{{form.password2.label}}</h5>
+            {{form.password2}}
+            <ul>
+                <li>Your password must contain at least 8 characters.</li>
+                <li>Your password can’t be entirely numeric</li>
+            </ul>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
         {% if form.errors %}
@@ -21,5 +30,5 @@
             </ul>
         </div>
         {% endif %}
-        </div
+    </div>
 {% endblock %}

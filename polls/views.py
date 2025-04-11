@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Poll, Choice
-from .forms import PollForm, ChoiceFormSet
+from .forms import PollForm, ChoiceFormSet, UserCreateForm
 from django.urls import reverse
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, FormView
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 class Login(FormView):
     form_class = AuthenticationForm
@@ -21,7 +21,7 @@ class Login(FormView):
 
 
 class NewUser(FormView):
-    form_class = UserCreationForm
+    form_class = UserCreateForm
     template_name = 'polls/register.html'
     
     def form_valid(self, form):
@@ -46,6 +46,7 @@ class Vote(DetailView):
     template_name = 'polls/vote.html'
     context_object_name = 'poll'
 
+# 
     def post(self, request, *args, **kwargs):
         choice_id = request.POST.get('choice')
         choice = get_object_or_404(Choice, pk=choice_id)
