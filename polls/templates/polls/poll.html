@@ -2,29 +2,39 @@
 {% block body%}
 <body>
     <div class= "container">
-        <h1>Vote on Poll</h1>
         <form method="post">
             {% csrf_token %}
             <div class="card mb-4 poll-card">
-            <h3 class="card-header"><button class="btn btn-primary btn-custom btn-space"><i class="fa-solid fa-less-than"></i></button></i>{{ poll.question }}</h3>
+            <h3 class="card-header d-flex justify-content-between align-items-center">
+                <span><a HREF="{% url 'polls:index' %}" class="btn btn-primary btn-custom btn-space"><i class="fa-solid fa-less-than"></i></a>{{ poll.question }}</span>
+                <span> Owner: {{poll.owner.username}}</span>
+            </h3>
                 <div class="card-body">
                     <ul>
-                        {% for choice in poll.choice_set.all %}
-                            <li>{{ choice.choice_text }} - {{ choice.votes }} votes</li>
+                        {% for choice in poll.choices.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ choice.choice_text }}</span>
+                            <span>{{ choice.votes.count }} votes</span></li>
                         {% endfor %}
                     </ul>
+                    {% if user.is_authenticated %}
                     <label for="choice">Choose an option:</label>
                     <select name="choice" id="choice">
-                        {% for choice in poll.choice_set.all %}
+                        {% for choice in poll.choices.all %}
                             <option value="{{ choice.id }}">{{ choice.choice_text }}</option>
                         {% endfor %}
                     </select>
                     <button type="submit">Vote</button>
+                    {% else %}
+                    <p>You must be logged in to vote.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% if user.username == poll.owner.username or user.is_superuser %}
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <A class="btn btn-danger btn-xs" HREF="{% url 'polls:delete_poll' poll.pk %}">Delete</A>
                     </div>
-                </div>
-            </div>
+                    {% endif %}
         </form>
     </div>
 </body>
