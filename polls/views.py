@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from .models import Poll, Choice
+from django.http import HttpResponse, HttpResponseForbidden
+from .models import Poll, Choice, Vote
 from .forms import PollForm, ChoiceFormSet, UserCreateForm
 from django.urls import reverse
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, FormView
@@ -21,12 +21,11 @@ class Login(FormView):
     def get_success_url(self):
         return reverse('polls:index')
 
+
 class Logout(LoginRequiredMixin, FormView):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('polls:index')
-    
-#----------------------------------- ----------------------------------- -----------------------------------   
 
 
 class NewUser(FormView):
@@ -43,25 +42,32 @@ class NewUser(FormView):
     def get_success_url(self):
         return reverse('polls:login')
     
-#----------------------------------- ----------------------------------- -----------------------------------   
 
 class PollList(ListView):
     model = Poll
     template_name = 'polls/index.html'
     context_object_name = 'polls'
     
+    
 class PollDetail(DetailView):
     model = Poll
     template_name = 'polls/poll.html'
     context_object_name = 'poll'
 
-# old method of voting
-    # def post(self, request, *args, **kwargs):
-    #     choice_id = request.POST.get('choice')
-    #     choice = get_object_or_404(Choice, pk=choice_id)
-    #     choice.votes += 1
-    #     choice.save()
-    #     return redirect('polls:index')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['choices'] = self.object.choices.all()
+        return context
+    
+    def post (self, request, *args, **kwargs):
+        poll = self.get_object()
+        choice_id = request.POST.get('choice')
+        choice = poll.choices.get(pk=choice_id)
+        if Vote.objects.filter(voter=request.user, choice__poll=poll).exists():
+            return HttpResponseForbidden("You have already voted on this poll.")
+        Vote.objects.create(choice=choice, voter=request.user)
+        return redirect('polls:vote', pk=poll.pk)
+    
     
 class NewPoll(LoginRequiredMixin, CreateView):
     model = Poll
@@ -78,6 +84,7 @@ class NewPoll(LoginRequiredMixin, CreateView):
         return context
     
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         context = self.get_context_data()
         formset = context['formset']
         if form.is_valid() and formset.is_valid():
@@ -90,6 +97,7 @@ class NewPoll(LoginRequiredMixin, CreateView):
     
     def get_success_url(self):
         return reverse('polls:index')
+
 
 class DeletePoll(DeleteView):
     model = Poll
