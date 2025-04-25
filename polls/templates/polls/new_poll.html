@@ -3,10 +3,10 @@
 <script>
     function addChoiceField() {
         console.log("Button clicked");
-        let formIdx = document.getElementById("id_choice_set-TOTAL_FORMS").value;
+        let formIdx = document.getElementById("id_choices-TOTAL_FORMS").value;
         let newField = document.getElementById("empty-form").innerHTML.replace(/__prefix__/g, formIdx);
         document.getElementById("choices-container").insertAdjacentHTML("beforeend", newField);
-        document.getElementById("id_choice_set-TOTAL_FORMS").value = parseInt(formIdx) + 1;
+        document.getElementById("id_choices-TOTAL_FORMS").value = parseInt(formIdx) + 1;
     }
 </script>
 {% endblock %}
@@ -22,7 +22,7 @@
             </div>
             
             <h3>What are the answers you want people to choose between?</h3>
-            <button type="button" class="btn btn-success btn-xs" onclick="addChoiceField()">+</button>
+            <button type="button" class="btn btn-success btn-xs" onclick="addChoiceField()">+</button> Add Choice
             <div id="choices-container">
                 {{ formset.management_form }}
                 {% for form in formset %}
