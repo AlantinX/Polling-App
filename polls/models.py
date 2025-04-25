@@ -16,5 +16,10 @@ class Choice(models.Model):
         return self.choice_text
     
 class Vote(models.Model):
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    voter = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='votes')
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='votes')
+    voter = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['voter', 'choice'], name='unique_vote_per_poll')
+        ]
